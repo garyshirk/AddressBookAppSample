@@ -13,13 +13,19 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailDescriptionLabel: UILabel!
 
 
-    @IBOutlet weak var nameTextfield: UITextField!
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var phoneTextField: UITextField!
+    @IBOutlet weak var streetTextField: UITextField!
+    @IBOutlet weak var cityTextField: UITextField!
+    @IBOutlet weak var stateTextField: UITextField!
+    @IBOutlet weak var zipTextField: UITextField!
+    
     
     func configureView() {
         // Update the user interface for the detail item.
         if let detail = self.detailItem {
             if let label = self.detailDescriptionLabel {
-                label.text = detail.name!.description
+                label.text = detail.firstname?.description
             }
         }
     }

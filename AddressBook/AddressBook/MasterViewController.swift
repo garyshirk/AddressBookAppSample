@@ -13,6 +13,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
+    
+    // configure pop over for UITableView on ipad
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
 
 
     override func viewDidLoad() {
@@ -23,15 +28,45 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 //        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
 //        self.navigationItem.rightBarButtonItem = addButton
         
-        if let split = self.splitViewController {
-            let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-        }
+//        if let split = self.splitViewController {
+//            let controllers = split.viewControllers
+//            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+//        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
         super.viewWillAppear(animated)
+        
+        displayFirstContactOrInstructions()
+        
+        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        // Debug
+//        let isSplitViewControllerCollapsed = self.splitViewController!.isCollapsed
+//        
+//        if isSplitViewControllerCollapsed {
+//            self.clearsSelectionOnViewWillAppear = true
+//        } else {
+//            self.clearsSelectionOnViewWillAppear = false
+//        }
+        
+        
+    }
+    
+    // if the UISplitViewController is not collapsed, 
+    // select first contact or display InstructionsViewController
+    func displayFirstContactOrInstructions() {
+        if let splitViewController = self.splitViewController {
+            if !(splitViewController.isCollapsed) {
+                // select and display first contact if is one
+                if self.tableView.numberOfRows(inSection: 0) > 0 {
+                    let indexPath = NSIndexPath(row: 0, section: 0)
+                    self.tableView.selectRow(at: indexPath as IndexPath, animated: false, scrollPosition: UITableViewScrollPosition.top)
+                    self.performSegue(withIdentifier: "showContactDetail", sender: self)
+                } else {
+                    self.performSegue(withIdentifier: "showInstructions", sender: self)
+                }
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,7 +79,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let newContact = Contact(context: context)
              
         // If appropriate, configure the new managed object.
-        newContact.name = "test"
+        newContact.firstname = "test"
 
         // Save the context.
         do {
@@ -111,7 +146,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(_ cell: UITableViewCell, withContact contact: Contact) {
-        cell.textLabel!.text = contact.name!.description
+        
+        let firstname = contact.firstname?.description ?? "no name"
+        cell.textLabel!.text = firstname
     }
 
     // MARK: - Fetched results controller
@@ -127,7 +164,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "firstname", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
