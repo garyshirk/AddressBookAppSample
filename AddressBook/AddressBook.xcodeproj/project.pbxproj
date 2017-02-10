@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E12C0C711E4D73DF00272658 /* AddEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12C0C701E4D73DF00272658 /* AddEditViewController.swift */; };
 		E14AD4B11E4D5234001CE2E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14AD4B01E4D5234001CE2E3 /* AppDelegate.swift */; };
 		E14AD4B41E4D5234001CE2E3 /* AddressBook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E14AD4B21E4D5234001CE2E3 /* AddressBook.xcdatamodeld */; };
 		E14AD4B61E4D5234001CE2E3 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14AD4B51E4D5234001CE2E3 /* MasterViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E12C0C701E4D73DF00272658 /* AddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditViewController.swift; sourceTree = "<group>"; };
 		E14AD4AD1E4D5234001CE2E3 /* AddressBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AddressBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E14AD4B01E4D5234001CE2E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E14AD4B31E4D5234001CE2E3 /* AddressBook.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AddressBook.xcdatamodel; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				E14AD4BE1E4D5234001CE2E3 /* LaunchScreen.storyboard */,
 				E14AD4C11E4D5234001CE2E3 /* Info.plist */,
 				E14AD4B21E4D5234001CE2E3 /* AddressBook.xcdatamodeld */,
+				E12C0C701E4D73DF00272658 /* AddEditViewController.swift */,
 			);
 			path = AddressBook;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1AC69D31E4D5CC10047DE30 /* Contact+CoreDataProperties.swift in Sources */,
+				E12C0C711E4D73DF00272658 /* AddEditViewController.swift in Sources */,
 				E14AD4B11E4D5234001CE2E3 /* AppDelegate.swift in Sources */,
 				E14AD4B41E4D5234001CE2E3 /* AddressBook.xcdatamodeld in Sources */,
 				E14AD4B61E4D5234001CE2E3 /* MasterViewController.swift in Sources */,
