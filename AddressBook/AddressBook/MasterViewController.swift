@@ -28,10 +28,24 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 //        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
 //        self.navigationItem.rightBarButtonItem = addButton
         
-//        if let split = self.splitViewController {
-//            let controllers = split.viewControllers
-//            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-//        }
+        if let split = self.splitViewController {
+            let controllers = split.viewControllers
+            
+            // Debug
+            print("controllers at count-1: \((controllers[controllers.count-1] as! UINavigationController).topViewController)")
+            
+            
+            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            
+            // Debug - detailViewController is nil here because above top controller is the InstructionViewController.
+            // Because this sample tutorial wires both the MasterVC to both the DetailVC and the InstructionsVC,
+            // I'm not sure how iOS deteremines which one is the top VC at this point of the app start
+            if self.detailViewController == nil {
+                print("vc is nil")
+            } else {
+                print("vc not nil")
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
