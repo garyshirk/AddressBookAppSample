@@ -6,10 +6,19 @@
 //  Copyright © 2017 Gary Shirk. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
-class AddEditViewController: UITableViewController {
+protocol AddEditViewControllerDelegate {
+    func didSaveContact(controller: AddEditViewController)
+}
 
+class AddEditViewController: UITableViewController {
+    
+    var delegate: AddEditViewControllerDelegate!
+    var isEditingContact: Bool!
+    var contact: Contact!
+    
     
     @IBOutlet weak var nameTextfield: UITextField!
     
@@ -25,6 +34,8 @@ class AddEditViewController: UITableViewController {
 
     @IBAction func saveButtonPressed(_ sender: Any) {
         print("save button pressed")
+        delegate.didSaveContact(controller: self)
+        
     }
     
     override func didReceiveMemoryWarning() {

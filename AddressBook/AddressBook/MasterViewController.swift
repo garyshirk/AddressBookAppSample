@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, AddEditViewControllerDelegate, DetailViewControllerDelegate {
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -46,6 +46,19 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 print("vc not nil")
             }
         }
+        
+        // For debug
+        makeAContact()
+    }
+    
+    // For debug - make a contact
+    func makeAContact() {
+        let newEntity = self.fetchedResultsController.fetchRequest.entity!
+        let newContact = Contact(entity: newEntity, insertInto: nil)
+        newContact.firstname = "Debug name"
+        let context = self.fetchedResultsController.managedObjectContext
+        context.insert(newContact)
+        tableView.reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +76,38 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 //            self.clearsSelectionOnViewWillAppear = false
 //        }
         
+        
+        
+    }
+    
+    func didSaveContact(controller: AddEditViewController) {
+        let context = self.fetchedResultsController.managedObjectContext
+        context.insert(controller.contact)
+        _ = self.navigationController?.popToRootViewController(animated: true)
+        
+        // save context to store the new contact
+        do {
+            try context.save()
+            
+            // after saving, get row of new contact in section info from fetchedResultController,
+            // select that row programmatically, and segue to contact DetailViewController
+            let sectionInfo = (self.fetchedResultsController.sections![0]) as NSFetchedResultsSectionInfo
+            let arrayOfContactObjects = sectionInfo.objects as! Array<Contact>
+            if let row = arrayOfContactObjects.index(of: controller.contact) {
+                let path = IndexPath(row: row, section: 0)
+                tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
+                performSegue(withIdentifier: "showContactDetail", sender: nil)
+            }
+            
+            
+            
+            
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func didEditContact(controller: DetailViewController) {
         
     }
     
@@ -109,13 +154,32 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "showContactDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-            let object = self.fetchedResultsController.object(at: indexPath)
+                // get contact for selected cell
+                let selectedContact = self.fetchedResultsController.object(at: indexPath) as Contact
+                
+                // configure DetailViewController
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                controller.delegate = self
+                controller.detailItem = selectedContact
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
+            }
+        
+        } else {
+            if segue.identifier == "showAddContact" {
+                // create new contact item that is not yet managed
+                let newEntity = self.fetchedResultsController.fetchRequest.entity!
+                let newContact = Contact(entity: newEntity, insertInto: nil)
+                
+                // configure the AddEditViewController
+                let controller = (segue.destination as! UINavigationController).topViewController as! AddEditViewController
+                controller.navigationItem.title = "Add Contact"
+                controller.delegate = self
+                controller.isEditingContact = false
+                controller.contact = newContact
             }
         }
     }

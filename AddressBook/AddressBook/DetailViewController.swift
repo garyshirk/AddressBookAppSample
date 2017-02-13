@@ -6,9 +6,17 @@
 //  Copyright © 2017 Gary Shirk. All rights reserved.
 //
 
+import CoreData
 import UIKit
 
+protocol DetailViewControllerDelegate {
+    func didEditContact(controller: DetailViewController)
+}
+
 class DetailViewController: UIViewController {
+    
+    var delegate:DetailViewControllerDelegate!
+    //var detailItem:Contact!
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
 
