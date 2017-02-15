@@ -414,7 +414,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="nameTextfield" destination="rFu-5b-Vny" id="HWV-Vg-D71"/>
+                        <outletCollection property="textFields" destination="rFu-5b-Vny" collectionClass="NSMutableArray" id="hEQ-18-hvw"/>
+                        <outletCollection property="textFields" destination="Mzi-6D-w3B" collectionClass="NSMutableArray" id="lda-aJ-WlP"/>
+                        <outletCollection property="textFields" destination="5Tp-se-qbw" collectionClass="NSMutableArray" id="Kkp-Ad-xVD"/>
+                        <outletCollection property="textFields" destination="Cr8-9u-YrC" collectionClass="NSMutableArray" id="tOX-nu-PGP"/>
+                        <outletCollection property="textFields" destination="ozm-Se-7d7" collectionClass="NSMutableArray" id="2q7-Fp-cLu"/>
+                        <outletCollection property="textFields" destination="dAg-4n-QMl" collectionClass="NSMutableArray" id="LXj-nn-doU"/>
+                        <outletCollection property="textFields" destination="vCB-02-xCD" collectionClass="NSMutableArray" id="yDl-ke-H2F"/>
+                        <outletCollection property="textFields" destination="D5f-hR-HDs" collectionClass="NSMutableArray" id="iOD-Ab-Y0c"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5mZ-pH-QEI" userLabel="First Responder" sceneMemberID="firstResponder"/>

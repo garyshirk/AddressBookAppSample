@@ -48,8 +48,20 @@ class DetailViewController: UIViewController, AddEditViewControllerDelegate {
     
     func didSaveContact(controller: AddEditViewController) {
         displayContact()
-        _ = self.navigationController?.popViewController(animated: true)
+        
+        //_ = self.navigationController?.popViewController(animated: true)
+        //_ = self.navigationController?.popToRootViewController(animated: true)
+        if let navController = self.navigationController {
+            navController.popViewController(animated: true)
+        }
+        
+        
         delegate.didEditContact(controller: self)
+        
+//        self.navigationController?.popToViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+//        
+//        [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count -2] animated:YES];
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

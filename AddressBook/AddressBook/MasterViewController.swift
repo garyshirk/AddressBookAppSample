@@ -48,10 +48,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         // For debug
-        makeAContact()
+        //makeAContact()
     }
     
-    // For debug - make a contact
+    // For debug - make a fake contact
     func makeAContact() {
         let newEntity = self.fetchedResultsController.fetchRequest.entity!
         let newContact = Contact(entity: newEntity, insertInto: nil)

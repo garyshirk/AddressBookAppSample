@@ -15,21 +15,30 @@ protocol AddEditViewControllerDelegate {
 
 class AddEditViewController: UITableViewController, UITextFieldDelegate {
     
+    @IBOutlet var textFields: [UITextField]!
+    
+    
     var delegate: AddEditViewControllerDelegate!
     var isEditingContact: Bool!
     var contact: Contact?
     
-    
-    @IBOutlet weak var nameTextfield: UITextField!
+    private let fieldNames = ["firstname", "lastname", "email", "phone", "address", "city", "state", "zip"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        for textField in textFields {
+            textField.delegate = self
+        }
+        
+        if isEditingContact == true {
+            for i in 0..<textFields.count {
+                if let value: Any =
+                    contact?.value(forKeyPath: fieldNames[i]) {
+                    textFields[i].text = (value as AnyObject).description
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,22 +61,31 @@ class AddEditViewController: UITableViewController, UITextFieldDelegate {
         notiCenter.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     func keyboardWillShow(notification: Notification) {
         
-        let userInfo = notification.userInfo
-        let frame = userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue
-        let size = frame.cgRectValue.size
+        // Didn't implement what the sample said because textfield seem to scroll perfectly without 
+        // trying to animate them with the keyboard as is done below
         
-        // Get duration of keyboard's slide-in animation
-        let animationTime = (userInfo![UIKeyboardFrameEndUserInfoKey] as AnyObject).doubleValue!
-        
-        // Scroll self.tableView so selected textfield is above keyboard
-        UIView.animate(withDuration: animationTime, animations: {
-            var insets = self.tableView.contentInset
-            insets.bottom = size.height
-            self.tableView.contentInset = insets
-            self.tableView.scrollIndicatorInsets = insets
-        })
+//        let userInfo = notification.userInfo
+//        let frame = userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue
+//        let size = frame.cgRectValue.size
+//        
+//        // Get duration of keyboard's slide-in animation
+//        //let animationTime = (userInfo![UIKeyboardFrameEndUserInfoKey] as AnyObject).doubleValue!
+//        let animationTime = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber
+//        let curve = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as! NSNumber
+//        
+//        UIView.animate(withDuration: TimeInterval(animationTime), delay: 0, options: [UIViewAnimationOptions(rawValue: UInt(curve))], animations: {
+//            var insets = self.tableView.contentInset
+//            insets.bottom = size.height
+//            self.tableView.contentInset = insets
+//            self.tableView.scrollIndicatorInsets = insets
+//        }, completion: nil)
         
     }
     
@@ -78,14 +96,22 @@ class AddEditViewController: UITableViewController, UITextFieldDelegate {
         self.tableView.scrollIndicatorInsets = insets
     }
     
-    
 
     @IBAction func saveButtonPressed(_ sender: Any) {
-        print("save button pressed")
-        if let del = delegate {
-            del.didSaveContact(controller: self)
+        if (textFields[0].text?.isEmpty)! || (textFields[1].text?.isEmpty)! {
+            // Alert dialog
+            let alert = UIAlertController(title: "Error", message: "First and last names are required", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Ok", style: .cancel)
+            alert.addAction(okAction)
+            present(alert, animated: true)
+        } else {
+            for i in 0..<fieldNames.count {
+                let fieldName = (!(textFields[i].text?.isEmpty)! ? textFields[i].text : nil)
+                self.contact?.setValue(fieldName, forKey: fieldNames[i])
+            }
         }
         
+        self.delegate.didSaveContact(controller: self)
     }
     
     override func didReceiveMemoryWarning() {
