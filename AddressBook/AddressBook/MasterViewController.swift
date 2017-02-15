@@ -55,7 +55,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func makeAContact() {
         let newEntity = self.fetchedResultsController.fetchRequest.entity!
         let newContact = Contact(entity: newEntity, insertInto: nil)
-        newContact.firstname = "Debug name"
+        newContact.firstname = "Harry"
+        newContact.lastname = "Fakecontact"
+        newContact.email = "myemail@nowhere.com"
+        newContact.phone = "+1 555-555-5555"
+        newContact.address = "123 Main St"
+        newContact.city = "Anywhere"
+        newContact.state = "PA"
         let context = self.fetchedResultsController.managedObjectContext
         context.insert(newContact)
         tableView.reloadData()
@@ -82,7 +88,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func didSaveContact(controller: AddEditViewController) {
         let context = self.fetchedResultsController.managedObjectContext
-        context.insert(controller.contact)
+        context.insert(controller.contact!)
         _ = self.navigationController?.popToRootViewController(animated: true)
         
         // save context to store the new contact
@@ -93,14 +99,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // select that row programmatically, and segue to contact DetailViewController
             let sectionInfo = (self.fetchedResultsController.sections![0]) as NSFetchedResultsSectionInfo
             let arrayOfContactObjects = sectionInfo.objects as! Array<Contact>
-            if let row = arrayOfContactObjects.index(of: controller.contact) {
+            if let row = arrayOfContactObjects.index(of: controller.contact!) {
                 let path = IndexPath(row: row, section: 0)
                 tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
                 performSegue(withIdentifier: "showContactDetail", sender: nil)
             }
-            
-            
-            
             
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
@@ -108,7 +111,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     func didEditContact(controller: DetailViewController) {
+        // user edited an existing contact, need to save here
+        let context = self.fetchedResultsController.managedObjectContext
         
+        // save context to store the new contact
+        do {
+            try context.save()
+            
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+
     }
     
     // if the UISplitViewController is not collapsed, 
@@ -124,6 +137,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 } else {
                     self.performSegue(withIdentifier: "showInstructions", sender: self)
                 }
+            } else {
+                
             }
         }
     }
@@ -159,6 +174,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 // get contact for selected cell
                 let selectedContact = self.fetchedResultsController.object(at: indexPath) as Contact
+                
+                print("selected contact firstname: \(selectedContact.firstname)")
                 
                 // configure DetailViewController
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
@@ -220,13 +237,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+            
+            displayFirstContactOrInstructions()
         }
     }
 
     func configureCell(_ cell: UITableViewCell, withContact contact: Contact) {
         
-        let firstname = contact.firstname?.description ?? "no name"
-        cell.textLabel!.text = firstname
+        cell.textLabel!.text = contact.lastname ?? "lastname"
+        cell.detailTextLabel!.text = contact.firstname ?? "firstname"
+        
+        print("contact firstname: \(contact.firstname)")
     }
 
     // MARK: - Fetched results controller
@@ -242,9 +263,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "firstname", ascending: false)
+        let lastNameSortDescriptor = NSSortDescriptor(key: "lastname", ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
+        let firstNameSortDescriptor = NSSortDescriptor(key: "firstname", ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.sortDescriptors = [lastNameSortDescriptor, firstNameSortDescriptor]
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".

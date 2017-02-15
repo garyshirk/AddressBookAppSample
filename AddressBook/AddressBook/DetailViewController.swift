@@ -13,13 +13,10 @@ protocol DetailViewControllerDelegate {
     func didEditContact(controller: DetailViewController)
 }
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, AddEditViewControllerDelegate {
     
     var delegate:DetailViewControllerDelegate!
-    //var detailItem:Contact!
-
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
-
+    var detailItem:Contact!
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var phoneTextField: UITextField!
@@ -28,34 +25,45 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var stateTextField: UITextField!
     @IBOutlet weak var zipTextField: UITextField!
     
-    
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.firstname?.description
-            }
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.configureView()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    var detailItem: Contact? {
-        didSet {
-            // Update the view.
-            self.configureView()
+        
+        if detailItem != nil {
+           displayContact()
         }
     }
-
-
+    
+    func displayContact() {
+        
+        self.navigationItem.title = detailItem.firstname! +  " " + detailItem.lastname!
+        
+        emailTextField.text = detailItem.email
+        phoneTextField.text = detailItem.phone
+        streetTextField.text = detailItem.address
+        cityTextField.text = detailItem.city
+        stateTextField.text = detailItem.state
+        zipTextField.text = detailItem.zip
+        
+    }
+    
+    func didSaveContact(controller: AddEditViewController) {
+        displayContact()
+        _ = self.navigationController?.popViewController(animated: true)
+        delegate.didEditContact(controller: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showEditDetails" {
+            let controller = (segue.destination as! UINavigationController).topViewController as! AddEditViewController
+            controller.navigationItem.title = "Edit Contact"
+            controller.delegate = self
+            controller.isEditingContact = true
+            controller.contact = detailItem
+            controller.navigationItem.title = "Edit Contact"
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+            controller.navigationItem.leftItemsSupplementBackButton = true
+        
+        }
+    }
 }
 
