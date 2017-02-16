@@ -112,6 +112,7 @@ class AddEditViewController: UITableViewController, UITextFieldDelegate {
         }
         
         self.delegate.didSaveContact(controller: self)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {

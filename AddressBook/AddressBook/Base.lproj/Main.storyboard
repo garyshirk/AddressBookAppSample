@@ -29,7 +29,7 @@
         <!--Detail-->
         <scene sceneID="yUG-lL-AsK">
             <objects>
-                <viewController title="Detail" id="JEX-9P-axG" customClass="DetailViewController" customModule="AddressBook" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detailVC" title="Detail" id="JEX-9P-axG" customClass="DetailViewController" customModule="AddressBook" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SYR-Wa-9uf"/>
                         <viewControllerLayoutGuide type="bottom" id="GAO-Cl-Wes"/>
@@ -129,7 +129,7 @@
                     <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="giR-84-Bqb">
                             <connections>
-                                <segue destination="5dc-HK-FZZ" kind="showDetail" identifier="showEditDetails" id="XnS-Du-kZi"/>
+                                <action selector="editButtonPressed:" destination="JEX-9P-axG" id="O3O-AQ-PsO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -153,7 +153,7 @@
                     <toolbarItems/>
                     <connections>
                         <segue destination="RMx-3f-FxP" kind="relationship" relationship="masterViewController" id="BlO-5A-QYV"/>
-                        <segue destination="1cB-gS-f16" kind="relationship" relationship="detailViewController" id="abq-x5-XcK"/>
+                        <segue destination="vC3-pB-5Vb" kind="relationship" relationship="detailViewController" id="wQK-H5-Qca"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZU-Oi-B1e" sceneMemberID="firstResponder"/>
@@ -173,18 +173,18 @@
                                 <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WCw-Qf-5nD" id="37f-cq-3Eg">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Arm-wq-HPj">
-                                            <rect key="frame" x="15" y="5" width="33.5" height="20.5"/>
+                                            <rect key="frame" x="15" y="4" width="34" height="21"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4av-Zf-our">
-                                            <rect key="frame" x="15" y="25.5" width="44" height="14.5"/>
+                                            <rect key="frame" x="15" y="25" width="44" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -194,7 +194,7 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
-                                    <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showContactDetail" id="6S0-TO-JiA"/>
+                                    <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showContactDetail" id="jFV-nd-xPU"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -207,7 +207,7 @@
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="2eb-rs-Nfw">
                             <connections>
-                                <segue destination="5dc-HK-FZZ" kind="showDetail" identifier="showAddContact" id="h0z-1L-d2S"/>
+                                <action selector="editButtonPressed:" destination="7bK-jq-Zjz" id="q0k-JE-Kdg"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -222,7 +222,7 @@
         <!--AddEditViewController-->
         <scene sceneID="HdH-tJ-ZqJ">
             <objects>
-                <tableViewController id="ayg-sM-025" userLabel="AddEditViewController" customClass="AddEditViewController" customModule="AddressBook" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="AddEditVC" id="ayg-sM-025" userLabel="AddEditViewController" customClass="AddEditViewController" customModule="AddressBook" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="UVe-Lv-8G4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -426,23 +426,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5mZ-pH-QEI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2142" y="-609"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="0jD-Cl-3Tt">
-            <objects>
-                <navigationController id="5dc-HK-FZZ" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wx8-cQ-pKe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="ayg-sM-025" kind="relationship" relationship="rootViewController" id="EBP-7Z-0CD"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4dc-s6-eQD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1417" y="-608"/>
+            <point key="canvasLocation" x="1562" y="-255"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
@@ -458,7 +442,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-45" y="129"/>
+            <point key="canvasLocation" x="-70" y="105"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="v9p-re-pR0">
@@ -474,7 +458,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fUG-GH-7Vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1481" y="444"/>
+            <point key="canvasLocation" x="1417" y="774"/>
         </scene>
         <!--Instructions View Controller-->
         <scene sceneID="dYQ-kc-Rbj">
@@ -508,11 +492,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lC5-qE-u6H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2201" y="444"/>
+            <point key="canvasLocation" x="2193" y="773"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Ep3-Lw-j1D"/>
-        <segue reference="XnS-Du-kZi"/>
+        <segue reference="wQK-H5-Qca"/>
     </inferredMetricsTieBreakers>
 </document>

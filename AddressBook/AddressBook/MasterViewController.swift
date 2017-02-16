@@ -87,9 +87,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     func didSaveContact(controller: AddEditViewController) {
+        
+        
         let context = self.fetchedResultsController.managedObjectContext
         context.insert(controller.contact!)
-        _ = self.navigationController?.popToRootViewController(animated: true)
+        //_ = self.navigationController?.popToRootViewController(animated: true)
         
         // save context to store the new contact
         do {
@@ -102,7 +104,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             if let row = arrayOfContactObjects.index(of: controller.contact!) {
                 let path = IndexPath(row: row, section: 0)
                 tableView.selectRow(at: path, animated: true, scrollPosition: .middle)
-                performSegue(withIdentifier: "showContactDetail", sender: nil)
+                //performSegue(withIdentifier: "showContactDetail", sender: nil)
             }
             
         } catch let error as NSError {
@@ -165,6 +167,25 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
+    
+    
+    @IBAction func editButtonPressed(_ sender: Any) {
+        // create new contact item that is not yet managed
+        let newEntity = self.fetchedResultsController.fetchRequest.entity!
+        let newContact = Contact(entity: newEntity, insertInto: nil)
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let controller = storyBoard.instantiateViewController(withIdentifier: "AddEditVC") as! AddEditViewController
+        
+        controller.navigationItem.title = "Add Contact"
+        controller.delegate = self
+        controller.isEditingContact = false
+        controller.contact = newContact
+        
+        self.navigationController?.pushViewController(controller, animated: true)
+        
+    }
+    
 
     // MARK: - Segues
 
@@ -193,10 +214,19 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 
                 // configure the AddEditViewController
                 let controller = (segue.destination as! UINavigationController).topViewController as! AddEditViewController
+                
+                //let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                //let controller = storyBoard.instantiateViewController(withIdentifier: "AddEditVC") as! AddEditViewController
+                
                 controller.navigationItem.title = "Add Contact"
                 controller.delegate = self
                 controller.isEditingContact = false
                 controller.contact = newContact
+                
+                self.navigationController?.pushViewController(controller, animated: true)
+                
+               // self.present(controller, animated:true, completion:nil)
+                
             }
         }
     }

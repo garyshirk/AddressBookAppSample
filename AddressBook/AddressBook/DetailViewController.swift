@@ -35,7 +35,11 @@ class DetailViewController: UIViewController, AddEditViewControllerDelegate {
     
     func displayContact() {
         
-        self.navigationItem.title = detailItem.firstname! +  " " + detailItem.lastname!
+        if let first = detailItem.firstname, let last = detailItem.lastname {
+            self.navigationItem.title = first + " " + last
+        }
+        
+        //self.navigationItem.title = detailItem.firstname! +  " " + detailItem.lastname!
         
         emailTextField.text = detailItem.email
         phoneTextField.text = detailItem.phone
@@ -46,14 +50,29 @@ class DetailViewController: UIViewController, AddEditViewControllerDelegate {
         
     }
     
+    @IBAction func editButtonPressed(_ sender: Any) {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        
+        let controller = storyBoard.instantiateViewController(withIdentifier: "AddEditVC") as! AddEditViewController
+        
+        controller.navigationItem.title = "Edit Contact"
+        controller.delegate = self
+        controller.isEditingContact = true
+        controller.contact = detailItem
+        controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+        controller.navigationItem.leftItemsSupplementBackButton = true
+        
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     func didSaveContact(controller: AddEditViewController) {
         displayContact()
         
         //_ = self.navigationController?.popViewController(animated: true)
         //_ = self.navigationController?.popToRootViewController(animated: true)
-        if let navController = self.navigationController {
-            navController.popViewController(animated: true)
-        }
+//        if let navController = self.navigationController {
+//            navController.popViewController(animated: true)
+//        }
         
         
         delegate.didEditContact(controller: self)
@@ -65,7 +84,9 @@ class DetailViewController: UIViewController, AddEditViewControllerDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showEditDetails" {
+        
+        
+        if segue.identifier == "showEditContact" {
             let controller = (segue.destination as! UINavigationController).topViewController as! AddEditViewController
             controller.navigationItem.title = "Edit Contact"
             controller.delegate = self
